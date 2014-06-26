@@ -1,78 +1,64 @@
-def max(num1, num2)
-	return num1 if num1 > num2
-	num2
-end
-
-def max_of_three(numbers)
+def max(numbers)
 	numbers.sort.pop
 end
 
-def is_vowel(char)
+def max_of_three(numbers)
+	max(numbers)
+end
+
+def is_vowel?(letter)
 	vowels = ["a", "e", "i", "o", "u", "y"]
-	vowels.include?(char)
+	return vowels.include?(letter.downcase)
 end
 
 def translate(phrase)
-	letters = phrase.split("")
-	letters.map! do |c|
-		if c == " " || is_vowel(c)
-			c = c
-		else
-			c = "#{c}o#{c}"
-		end
+	phrase.split("").map do |letter|
+		letter = "#{letter}o#{letter}" unless is_vowel?(letter) || letter == " "
+		letter
 	end
-	letters.join("")
-end
-
-def sum(numbers)
-	numbers.inject(:+)
-end
-
-def multiply(numbers)
-	numbers.inject(:*)
+	.join("")
 end
 
 def find_longest_word(words)
-	words.sort_by(&:length).pop
+	words.sort { |a,b| a.length - b.length}.pop
 end
 
-def filter_long_words(words, max)
-	words.keep_if do |word|
-		word.length > max
+def filter_longer_words(words, max)
+	new_words = []
+	words.each do |word|
+		new_words << word if word.length > max
 	end
-	words
+	new_words
 end
 
 def char_freq(phrase)
 	freq = {}
-	phrase.split("").each do |char|
-		if freq[char]
-			freq[char] += 1
+	phrase.split("").each do |letter|
+		if freq[letter]
+			freq[letter] += 1
 		else
-			freq[char] = 0
+			freq[letter] = 1
 		end
 	end
-	p freq.sort_by{|k,v| k}
+	freq
 end
 
-#=============================================
-puts max(3,5) == 5
-puts max(-3,-5) == -3
-puts max_of_three([1,5,8]) == 8
-puts max_of_three([-1,-5,-4]) == -1
-puts is_vowel("e") == true
-puts is_vowel("b") == false
+# DRIVER CODE
+print 'max should return 7: ' 
+puts max([7,1]) == 7
+print 'max_of_three should return -2: '
+puts max_of_three([-3,-5,-2]) == -2
+print 'is vowel should return false: '
+puts is_vowel?("b") == false
+print 'is vowel should return true: '
+puts is_vowel?("e") == true
+print 'translate should return "tothohisos isos fofunon": '
 puts translate("this is fun") == "tothohisos isos fofunon"
-puts sum([1,5,6]) == 12
-puts multiply([3,4,2]) == 24
-puts find_longest_word(["bacon", "boo", "blue", "extrasandwich"]) == "extrasandwich"
-puts filter_long_words(["bacon", "boo", "blue", "extrasandwich"], 4) == ["bacon", "extrasandwich"]
-puts char_freq("aaabdbabccdadd") == {"a" => 5, "b" => 3, "c" => 2, "d" => 4}
-
-
-
-
-
-
+print 'find longest word should return "bacon bits": '
+puts find_longest_word(['boo', 'bacon bits', 'chicken', 'breakfast', 'coffee']) == 'bacon bits'
+print 'filter longer words should return ["bobby", "brown", "legend"]: '
+puts filter_longer_words(["bobby", "brown", "is", "not", "a", "legend"], 4) == ["bobby", "brown", "legend"]
+print 'char freq should return {a: 3, b: 2, c: 3, d: 1}'
+puts char_freq("abacbdacc") == {"a" => 3, "b" => 2, "c" => 3, "d" => 1}
 
 
